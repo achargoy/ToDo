@@ -48,4 +48,22 @@ public class TodoController : ControllerBase
             return StatusCode(500, new {message = "An error occurred while retrieving all Todo it posts", error = ex.Message});
         }
     }
+
+    [HttpGet("id:guid")]
+    public async Task<IActionResult> GetByIdAsync(Guid id)
+    {
+        try
+        {
+            var todo = await _todoService.GetByIdAsync(id);
+            if (todo == null)
+            {
+                return NotFound(new { message = $"No Todo item with Id {id} found." });
+            }
+            return Ok(new { message = $"Successfully retrieved Todo item with Id {id}.", data = todo });
+        }
+        catch (System.Exception ex)
+        {
+            return StatusCode(500, new { message = $"An error occurred while retrieving the Todo item with Id {id}.", error = ex.Message });
+        }
+    }
 }

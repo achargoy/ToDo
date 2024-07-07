@@ -48,9 +48,14 @@ public class TodoServices : ITodoServices
         return todo;
     }
 
-    public Task<Todo> GetByIdAsync(Guid id)
+    public async Task<Todo> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var todo = await _dbContext.Todos.FindAsync(id);
+        if (todo == null)
+        {
+            throw new KeyNotFoundException($"No Todo item with Id {id} found.");
+        }
+        return todo;
     }
 
     public Task UpdateTodoAsync(Guid id, UpdateTodoRequest request)
