@@ -33,9 +33,18 @@ public class TodoServices : ITodoServices
         }
     }
 
-    public Task DeleteTodoAsync(Guid id)
+    public async Task DeleteTodoAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var todo = await _dbContext.Todos.FindAsync(id);
+        if (todo != null)
+        {
+            _dbContext.Remove(todo);
+            await _dbContext.SaveChangesAsync();
+        }
+        else
+        {
+            throw new Exception($"No  item found with the id {id}");
+        }
     }
 
     public async Task<IEnumerable<Todo>> GetAllAsync()

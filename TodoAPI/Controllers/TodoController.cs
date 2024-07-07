@@ -91,4 +91,18 @@ public class TodoController : ControllerBase
             return StatusCode(500, new { message = $"An error occurred while updating blog post with id {id}", error = ex.Message });
         }
     }
+
+    [HttpDelete("id:guid")]
+    public async Task<IActionResult> DeleteTodoAsync(Guid id)
+    {
+        try
+        {
+            await _todoService.DeleteTodoAsync(id);
+            return Ok(new { message = $"Todo  with id {id} successfully deleted" });
+        }
+        catch (System.Exception ex)
+        {
+            return StatusCode(500, new { message = $"An error occurred while deleting Todo Item  with id {id}", error = ex.Message });
+        }
+    }
 }
