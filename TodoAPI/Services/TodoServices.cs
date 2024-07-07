@@ -58,8 +58,44 @@ public class TodoServices : ITodoServices
         return todo;
     }
 
-    public Task UpdateTodoAsync(Guid id, UpdateTodoRequest request)
+    public async Task UpdateTodoAsync(Guid id, UpdateTodoRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var todo = await _dbContext.Todos.FindAsync(id);
+            if(todo == null)
+            {
+                throw new Exception($"Todo item with id {id} not found.");
+            }
+
+            if (request.Title != null)
+            {
+                todo.Title = request.Title;
+            }
+            if (request.Description != null)
+            {
+                todo.Description = request.Description;
+            }
+            if (request.IsComplete != null)
+            {
+                todo.IsComplete = request.IsComplete.Value;
+            }
+            if (request.DueDate != null)
+            {
+                todo.DueDate = request.DueDate.Value;
+            }
+            if (request.Priority != null)
+            {
+                todo.Priority = request.Priority.Value;
+            }
+
+            todo.UpdatedAt = DateTime.Now;
+            await _dbContext.SaveChangesAsync();
+        }
+        catch (System.Exception ex)
+        {
+            _logger.LogError(ex, $"An error occurred while updating the todo item with id {id}.");
+            throw;
+        }
     }
 }
