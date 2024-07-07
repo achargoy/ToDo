@@ -45,7 +45,7 @@ public class TodoController : ControllerBase
         }
         catch (System.Exception ex)
         {
-            return StatusCode(500, new {message = "An error occurred while retrieving all Tood it posts", error = ex.Message});
+            return StatusCode(500, new {message = "An error occurred while retrieving all Todo it posts", error = ex.Message});
         }
     }
 }
